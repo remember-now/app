@@ -45,7 +45,10 @@ function PWABadge() {
           </div>
           <div className="PWABadge-buttons">
             {needRefresh && (
-              <button className="PWABadge-toast-button" onClick={() => updateServiceWorker(true)}>
+              <button
+                className="PWABadge-toast-button"
+                onClick={() => void updateServiceWorker(true)}
+              >
                 Reload
               </button>
             )}
@@ -67,7 +70,7 @@ export default PWABadge;
 function registerPeriodicSync(period: number, swUrl: string, r: ServiceWorkerRegistration) {
   if (period <= 0) return;
 
-  setInterval(async () => {
+  const tick = async () => {
     if ('onLine' in navigator && !navigator.onLine) return;
 
     const resp = await fetch(swUrl, {
@@ -79,5 +82,9 @@ function registerPeriodicSync(period: number, swUrl: string, r: ServiceWorkerReg
     });
 
     if (resp?.status === 200) await r.update();
+  };
+
+  setInterval(() => {
+    void tick();
   }, period);
 }

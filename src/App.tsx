@@ -1,5 +1,4 @@
-import { useAtom } from 'jotai';
-import { countAtom } from './atoms';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import reactLogo from './assets/react.svg';
 import appLogo from '/favicon.svg';
@@ -7,7 +6,22 @@ import PWABadge from './PWABadge';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useAtom(countAtom);
+  const queryClient = useQueryClient();
+
+  // Query to read the count (starts at 0)
+  const { data: count = 0 } = useQuery<number>({
+    queryKey: ['count'],
+    queryFn: () => Promise.resolve(0),
+    initialData: 0,
+  });
+
+  // Mutation to increment
+  const { mutate: increment } = useMutation({
+    mutationFn: () => Promise.resolve(count + 1),
+    onSuccess: (newCount) => {
+      queryClient.setQueryData(['count'], newCount);
+    },
+  });
 
   return (
     <>
@@ -23,7 +37,7 @@ function App() {
       <h1>remember-now</h1>
 
       <div className="card">
-        <Button className="mb-6" onClick={() => setCount((c: number) => c + 1)}>
+        <Button onClick={() => increment()} className="mb-6">
           count is {count}
         </Button>
         <p>

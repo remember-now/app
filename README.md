@@ -7,6 +7,18 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Tech stack
+
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) - consistent commit messages
+- [TypeScript](https://www.typescriptlang.org/) - strongly typed language
+- [Vite PWA](https://vite-pwa-org.netlify.app/) - PWA tooling powered by Vite
+- [Jotai](https://jotai.org/) - cross-platform state management
+- [TailwindCSS](https://tailwindcss.com/) - plug and play styling
+- [shadcn/ui](https://ui.shadcn.com/) - headless, customizable components
+- [eslint](https://eslint.org/) - linting
+- [prettier](https://prettier.io/) - automatic formatting
+- [husky](https://github.com/typicode/husky) - pre-commit checks
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:

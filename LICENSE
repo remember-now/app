@@ -8,7 +8,7 @@ Additional Use Grant:
 You may make use of the Licensed Work, with or without modification, for personal or internal business purposes. However, you may not use the Licensed Work for a commercial purpose, including but not limited to offering it as a paid service, selling derivative products, or integrating it into commercial software, without purchasing a separate commercial license from the Licensor.
 
 Change License:
-This license will convert to the Apache License 2.0, on or before April 13, 2029 (4 years from the current date).
+This license will convert to the MIT License, on or before April 13, 2029 (4 years from the current date).
 
 License Text:
 
@@ -17,7 +17,7 @@ Parameters
 Licensor:           The individual or legal entity offering the Licensed Work under the terms of this License.
 Licensed Work:      The software or other specified work that is being provided under this License.
 Change Date:        4 years from the date of first release.
-Change License:     Apache License 2.0
+Change License:     MIT
 
 Terms
 -----

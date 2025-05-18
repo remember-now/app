@@ -1,13 +1,13 @@
 # RememberNow
 
-An app to make remembering things really easy.
+An offline-first app to make remembering things really easy.
 
 ## Tech stack
 
 - [React 18](https://react.dev/) - core UI library
 - [TypeScript](https://www.typescriptlang.org/) - strongly typed language
 - [Vite PWA](https://vite-pwa-org.netlify.app/) - PWA tooling powered by Vite
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) - uses [Babel](https://babeljs.io/) for Fast Refresh
+- [React Router v6](https://reactrouter.com/6.30.0) - Routing that is compatible with Vite PWA
 - [TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview) - powerful asynchronous state management
 - [TailwindCSS](https://tailwindcss.com/) - plug and play styling
 - [shadcn/ui](https://ui.shadcn.com/) - headless, customizable components

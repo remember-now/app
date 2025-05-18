@@ -1,54 +1,40 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
+import { Outlet } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import appLogo from '/favicon.svg';
-import PWABadge from './PWABadge';
-import './App.css';
+import ReloadPrompt from './components/pwa/ReloadPrompt';
 
 function App() {
-  const queryClient = useQueryClient();
-
-  // Query to read the count (starts at 0)
-  const { data: count = 0 } = useQuery<number>({
-    queryKey: ['count'],
-    queryFn: () => Promise.resolve(0),
-    initialData: 0,
-  });
-
-  // Mutation to increment
-  const { mutate: increment } = useMutation({
-    mutationFn: () => Promise.resolve(count + 1),
-    onSuccess: (newCount) => {
-      queryClient.setQueryData(['count'], newCount);
-    },
-  });
-
   return (
-    <>
-      <div className="flex justify-center w-full">
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={appLogo} className="logo" alt="remember-now logo" />
+    <div className="max-w-5xl mx-auto p-8 text-center">
+      <div className="flex justify-center items-center gap-4 mb-8">
+        <a href="https://vite.dev" target="_blank" rel="noreferrer" className="group">
+          <img
+            src={appLogo}
+            alt="remember-now logo"
+            className="h-24 p-6 transition-all duration-300 group-hover:drop-shadow-[0_0_0.5em_#646cffaa]"
+          />
         </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+        <a href="https://react.dev" target="_blank" rel="noreferrer" className="group">
+          <img
+            src={reactLogo}
+            alt="React logo"
+            className="h-24 p-6 transition-all duration-300 animate-[spin_20s_linear_infinite] group-hover:drop-shadow-[0_0_0.5em_#61dafbaa]"
+          />
         </a>
       </div>
 
-      <h1>remember-now</h1>
+      <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent mb-6">
+        remember-now
+      </h1>
 
-      <div className="card">
-        <Button onClick={() => increment()} className="mb-6">
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="p-8 bg-gray-50 rounded-lg shadow-sm mb-8">
+        <Outlet />
       </div>
 
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <p className="text-gray-400 text-sm">Click on the Vite and React logos to learn more</p>
 
-      <PWABadge />
-    </>
+      <ReloadPrompt />
+    </div>
   );
 }
 

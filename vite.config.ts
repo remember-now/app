@@ -4,14 +4,30 @@ import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 
+const claims = process.env.CLAIMS === 'true';
+const generateSW = process.env.SW !== 'true';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
-      injectRegister: false,
+      registerType: claims ? 'autoUpdate' : 'prompt',
+      injectRegister: 'auto',
+
+      // If generateSW is false, we're using the injectManifest strategy
+      ...(generateSW
+        ? {}
+        : {
+            srcDir: 'src',
+            filename: claims ? 'lib/pwa/claims-sw.ts' : 'lib/pwa/prompt-sw.ts',
+            strategies: 'injectManifest',
+            injectManifest: {
+              minify: false,
+              enableWorkboxModulesLogs: true,
+            },
+          }),
 
       manifest: {
         name: 'remember-now',
@@ -19,29 +35,29 @@ export default defineConfig({
         description: 'Memory augmentation and productivity PWA. Free!',
         theme_color: '#ffffff',
 
-        icons: [
-          {
-            src: 'pwa-64x64.png',
-            sizes: '64x64',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'maskable-icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-        ],
+        // icons: [
+        //   {
+        //     src: 'pwa-64x64.png',
+        //     sizes: '64x64',
+        //     type: 'image/png',
+        //   },
+        //   {
+        //     src: 'pwa-192x192.png',
+        //     sizes: '192x192',
+        //     type: 'image/png',
+        //   },
+        //   {
+        //     src: 'pwa-512x512.png',
+        //     sizes: '512x512',
+        //     type: 'image/png',
+        //   },
+        //   {
+        //     src: 'maskable-icon-512x512.png',
+        //     sizes: '512x512',
+        //     type: 'image/png',
+        //     purpose: 'maskable',
+        //   },
+        // ],
       },
 
       workbox: {
@@ -51,7 +67,7 @@ export default defineConfig({
       },
 
       devOptions: {
-        enabled: false,
+        enabled: process.env.SW_DEV === 'true',
         navigateFallback: 'index.html',
         suppressWarnings: true,
         type: 'module',

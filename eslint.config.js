@@ -5,6 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -29,11 +30,13 @@ export default tseslint.config(
       react: react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      '@tanstack/query': tanstackQuery,
     },
 
     rules: {
       ...reactHooks.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
+      ...tanstackQuery.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',

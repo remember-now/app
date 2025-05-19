@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SidebarProvider } from './components/ui/sidebar';
 import App from './App';
 import './index.css';
+import { ThemeProvider } from './components/theme-provider';
 
 const queryClient = new QueryClient();
 
@@ -12,9 +13,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <SidebarProvider defaultOpen>
-          <App />
-        </SidebarProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <SidebarProvider defaultOpen>
+            <App />
+          </SidebarProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>

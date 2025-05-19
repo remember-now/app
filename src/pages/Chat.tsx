@@ -3,9 +3,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useAssistant, useAssistantActions } from '@/core/assistant';
-import { Send, Bot, Loader2 } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 
-const Main = () => {
+const Chat = () => {
   const [input, setInput] = useState('');
   const { messages, isProcessing } = useAssistant();
   const { sendMessage } = useAssistantActions();
@@ -29,18 +29,10 @@ const Main = () => {
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] h-full max-h-screen max-w-4xl w-full mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center space-x-2">
-          <Bot className="h-5 w-5 text-primary" />
-          <h1 className="text-lg font-medium">Assistant</h1>
-        </div>
-      </div>
-
       {/* Chat messages */}
-      <div className="min-h-0 overflow-hidden">
+      <div className="mt-15 min-h-0 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className="p-4 space-y-2">
+          <div className="pt-2 p-5 space-y-3">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
                 <p className="text-center">How can I help you today?</p>
@@ -56,10 +48,8 @@ const Main = () => {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`flex max-w-[80%] ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-l-lg rounded-br-lg'
-                        : 'bg-muted rounded-r-lg rounded-bl-lg'
+                    className={`flex max-w-[80%] rounded-lg ${
+                      message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
                     } p-3`}
                   >
                     <div className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -111,4 +101,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Chat;

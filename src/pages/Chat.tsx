@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -9,10 +9,21 @@ const Chat = () => {
   const [input, setInput] = useState('');
   const { messages, isProcessing } = useAssistant();
   const { sendMessage } = useAssistantActions();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const scrollContainer = scrollAreaRef.current;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [messages, isProcessing]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-
     if (input.trim() && !isProcessing) {
       const message = input.trim();
       setInput('');
@@ -28,11 +39,11 @@ const Chat = () => {
   };
 
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] h-full max-h-screen max-w-4xl w-full mx-auto">
+    <div className="grid grid-rows-[auto_1fr_auto] h-full max-h-screen w-full">
       {/* Chat messages */}
-      <div className="mt-15 min-h-0 overflow-hidden">
-        <ScrollArea className="h-full">
-          <div className="pt-2 p-5 space-y-3">
+      <div className="mt-15 min-h-71 overflow-hidden">
+        <ScrollArea className="h-full" viewportRef={scrollAreaRef}>
+          <div className="max-w-3xl mx-auto pt-2 p-5 space-y-4">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
                 <p className="text-center">How can I help you today?</p>
@@ -76,19 +87,20 @@ const Chat = () => {
       </div>
 
       {/* Input */}
-      <div className="p-4 mb-2">
+      <div className="w-full max-w-3xl mx-auto p-4 mt-5 mb-8">
         <form onSubmit={handleSubmit} className="flex space-x-2 items-center">
           <Textarea
+            ref={textareaRef}
             placeholder="Type your message here..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isProcessing}
-            className="max-h-36 resize-none"
+            className="h-20 resize-none"
             rows={1}
           />
           <Button
-            className="h-10 w-10"
+            className="h-10 w-10 cursor-pointer"
             type="submit"
             size="icon"
             disabled={!input.trim() || isProcessing}

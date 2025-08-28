@@ -1,5 +1,4 @@
 import { apiClient } from '@/lib/http';
-import { Entity } from './types';
 
 class HttpService {
   constructor(private readonly endpoint: string) {}
@@ -12,9 +11,9 @@ class HttpService {
     return { request, cancel: () => controller.abort() };
   }
 
-  delete(id: number) {
+  getById<T>(id: string | number) {
     const controller = new AbortController();
-    const request = apiClient.delete(`${this.endpoint}/${id}`, {
+    const request = apiClient.get<T>(`${this.endpoint}/${id}`, {
       signal: controller.signal,
     });
     return { request, cancel: () => controller.abort() };
@@ -28,9 +27,17 @@ class HttpService {
     return { request, cancel: () => controller.abort() };
   }
 
-  update<T extends Entity>(entity: T) {
+  put<T>(id: string | number, entity: unknown) {
     const controller = new AbortController();
-    const request = apiClient.patch<T>(`${this.endpoint}/${entity.id}`, entity, {
+    const request = apiClient.put<T>(`${this.endpoint}/${id}`, entity, {
+      signal: controller.signal,
+    });
+    return { request, cancel: () => controller.abort() };
+  }
+
+  deleteById(id: string | number) {
+    const controller = new AbortController();
+    const request = apiClient.delete(`${this.endpoint}/${id}`, {
       signal: controller.signal,
     });
     return { request, cancel: () => controller.abort() };

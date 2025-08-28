@@ -1,7 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAssistantContext } from './context';
-import { processUserMessage } from './providers/nlp';
-import { executeActions } from './providers/actions';
+import { processUserMessage } from './providers/agent';
+import { getActionExecutor, setNavigateFunction } from './providers/actions';
+import { ActionExecutionState, ActionExecutionObserver } from './types';
 
 export function useAssistant() {
   const { state } = useAssistantContext();
@@ -16,6 +18,12 @@ export function useAssistant() {
 
 export function useAssistantActions() {
   const { dispatch } = useAssistantContext();
+  const navigate = useNavigate();
+
+  // Provide navigate function to actions
+  useEffect(() => {
+    setNavigateFunction(navigate);
+  }, [navigate]);
 
   const sendMessage = useCallback(
     async (message: string) => {
@@ -28,10 +36,8 @@ export function useAssistantActions() {
 
         if (actions.length > 0) {
           dispatch({ type: 'PROCESSING_START' });
-          const actionResults = await executeActions(actions);
 
-          console.log('Action results:', actionResults);
-          // TODO: If action failed, let LLM compose a response to the user here?
+          await getActionExecutor().executeActionsWithConfirmation(actions);
         }
 
         // Send the assistant's response
@@ -53,5 +59,53 @@ export function useAssistantActions() {
   return {
     sendMessage,
     clearMessages,
+  };
+}
+
+/**
+ * Hook for observing action executions and handling confirmations
+ */
+export function useActionExecution() {
+  const [executionStates, setExecutionStates] = useState<ActionExecutionState[]>([]);
+
+  useEffect(() => {
+    const actionExecutor = getActionExecutor();
+
+    const observer: ActionExecutionObserver = {
+      onStateChange: (state: ActionExecutionState) => {
+        setExecutionStates((prev) => {
+          // Replace existing state for same actionId or add new one
+          const existingIndex = prev.findIndex((s) => s.actionId === state.actionId);
+
+          if (existingIndex >= 0) {
+            const newStates = [...prev];
+            newStates[existingIndex] = state;
+            return newStates;
+          } else {
+            return [...prev, state];
+          }
+        });
+      },
+    };
+
+    actionExecutor.addObserver(observer);
+
+    return () => {
+      actionExecutor.removeObserver(observer);
+    };
+  }, []);
+
+  const confirmAction = useCallback((actionId: string, confirmed: boolean) => {
+    getActionExecutor().confirmAction(actionId, confirmed);
+  }, []);
+
+  const clearExecutionHistory = useCallback(() => {
+    setExecutionStates([]);
+  }, []);
+
+  return {
+    executionStates,
+    confirmAction,
+    clearExecutionHistory,
   };
 }

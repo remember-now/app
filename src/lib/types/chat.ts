@@ -19,7 +19,7 @@ export interface ChatRequest {
 }
 
 export interface ChatResponse {
-  message: string;
+  response: string;
   actions?: Array<{
     name: string;
     params: Record<string, unknown>;

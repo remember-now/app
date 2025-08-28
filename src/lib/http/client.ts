@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { createLogger } from '../utils';
 import { setupMockInterceptors, shouldEnableMocking } from './mocks';
+import { shouldUseDevAuth, getDevCredentials } from './dev-auth';
 
 const logger = createLogger('ApiClient');
 
 const baseURL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3333';
+
+axios.defaults.withCredentials = true;
 
 export const apiClient = axios.create({
   baseURL: baseURL,
@@ -35,5 +38,17 @@ apiClient.interceptors.response.use(
     throw error;
   }
 );
+
+if (shouldUseDevAuth()) {
+  const credentials = getDevCredentials();
+
+  if (credentials) {
+    logger.log('Dev auth enabled - auto-authenticating', credentials);
+
+    apiClient.post('/auth/login', credentials).catch((error: Error) => {
+      logger.error('Dev auth failed:', error.message);
+    });
+  }
+}
 
 logger.debug(`Base URL: ${baseURL}`);

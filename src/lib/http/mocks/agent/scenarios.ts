@@ -6,7 +6,7 @@ import { ChatResponse } from '@/lib/types';
  */
 export const MOCK_SCENARIOS: Record<string, ChatResponse> = {
   'navigate-success': {
-    message: "I'll take you to the dashboard now.",
+    response: "I'll take you to the dashboard now.",
     actions: [
       {
         name: 'navigate',
@@ -16,7 +16,7 @@ export const MOCK_SCENARIOS: Record<string, ChatResponse> = {
   },
 
   'navigate-fail': {
-    message: "I'll take you to /PRANKED now.",
+    response: "I'll take you to /PRANKED now.",
     actions: [
       {
         name: 'navigate',
@@ -26,7 +26,7 @@ export const MOCK_SCENARIOS: Record<string, ChatResponse> = {
   },
 
   'navigate-notify': {
-    message: "I'll navigate you and then show a notification.",
+    response: "I'll navigate you and then show a notification.",
     actions: [
       {
         name: 'navigate',
@@ -40,12 +40,12 @@ export const MOCK_SCENARIOS: Record<string, ChatResponse> = {
   },
 
   'no-actions': {
-    message: "I understand, but I don't have any actions to perform right now.",
+    response: "I understand, but I don't have any actions to perform right now.",
     actions: [],
   },
 
   'confirmation-required': {
-    message: 'I can delete your account, but this action requires confirmation.',
+    response: 'I can delete your account, but this action requires confirmation.',
     actions: [
       {
         name: 'delete-account',

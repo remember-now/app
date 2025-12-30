@@ -47,7 +47,7 @@ export function generateMockResponse(message: string): ChatResponse | null {
 
     default:
       return {
-        message: `Unknown mock command: ${command}. Available commands: error, navigate, scenario`,
+        response: `Unknown mock command: ${command}. Available commands: error, navigate, scenario`,
         actions: [],
       };
   }
@@ -64,7 +64,7 @@ function handleMockNavigate(params: string[]): ChatResponse {
   const path = params[0] || '/';
 
   return {
-    message: `I'll navigate you to ${path}`,
+    response: `I'll navigate you to ${path}`,
     actions: [
       {
         name: 'navigate',
@@ -80,7 +80,7 @@ function handleMockScenario(params: string[]): ChatResponse {
   if (!scenarioName) {
     const availableScenarios = Object.keys(MOCK_SCENARIOS).join(', ');
     return {
-      message: `Please specify a scenario name. Available scenarios: ${availableScenarios}`,
+      response: `Please specify a scenario name. Available scenarios: ${availableScenarios}`,
       actions: [],
     };
   }
@@ -89,7 +89,7 @@ function handleMockScenario(params: string[]): ChatResponse {
   if (!scenario) {
     const availableScenarios = Object.keys(MOCK_SCENARIOS).join(', ');
     return {
-      message: `Unknown scenario: ${scenarioName}. Available scenarios: ${availableScenarios}`,
+      response: `Unknown scenario: ${scenarioName}. Available scenarios: ${availableScenarios}`,
       actions: [],
     };
   }
